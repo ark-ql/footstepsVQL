@@ -461,6 +461,6 @@ a single footstep.
 | [`RELEASE.md`](RELEASE.md) | full release notes: every change, every gate, every measurement |
 | [`docs/footstep-rate.png`](docs/footstep-rate.png) | the chart, made by [`scripts/_readme_chart.py`](scripts/_readme_chart.py) |
 
-Contact: ark · Discord [arkadnik](https://discord.com/users/352928164780965891).
+Contact: ark · Discord [`arkadnik.`](https://discord.com/users/352928164780965891)
 
 License: [MIT](LICENSE).
