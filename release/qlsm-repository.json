@@ -3,7 +3,7 @@
     {
       "filename": "footstepsVQL.py",
       "label": "footstepsVQL",
-      "description": "Footsteps for high-fps players, without the doubled sounds. Stock QL plays fewer footsteps above ~400 fps and none at 500+; footstepsVQL makes such players sound to everyone else like a 250 fps player, and never changes what a player hears from himself. Replaces footsteps250: untick it. Server-side native hook for qagamex64.so 091d568f (the current Steam build); on any other build it refuses and the server stays stock. Docs: https://github.com/ark-ql/footstepsVQL",
+      "description": "Footsteps for high-fps players, without the doubled sounds. Stock QL plays fewer footsteps above ~400 fps and none at 500+; footstepsVQL makes such players sound to everyone else like a 250 fps player, and never changes what a player hears from himself.",
       "requires_qlsm_version": "1.43.0",
       "sha256": "8fae5aa17743c2be191d1cfbcc30d4ea40469d2856b7949cdb7bf34c1b9b5597",
       "package_files": {
