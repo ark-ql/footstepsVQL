@@ -7,9 +7,11 @@ like a player at 250 fps, and never changes what a player hears from himself.
 It replaces `footsteps250` 2.1, which made high-fps players audible but doubled
 their own jump and shot sounds.
 
-**Release:** footstepsVQL 1.1, `footstepsVQL_hook.so` `c96f49decdef…` +
-`footstepsVQL.py` `7ce3da41db70…`, 2026-10-07. **In production on four
-community servers** (one LG duel, three CA) since 7–11 October 2026: 553 map
+**Release:** footstepsVQL 1.1.1, `footstepsVQL_hook.so` `c96f49decdef…` +
+`footstepsVQL.py` `8fae5aa17743…`, 2026-10-18. Installs by hand or from a
+[QLSM plugin repository](#install). **The library has been in production on
+four community servers** (one LG duel, three CA) since 7–11 October 2026,
+with the 1.1 plugin: 553 map
 loads and 47 restarts with 0 install failures, and at least 126,754 footsteps
 delivered to listeners (see [In production](#5-in-production)).
 
@@ -377,22 +379,36 @@ Details per server are in [`RELEASE.md`](RELEASE.md), *In production*.
 
 ## Install
 
-1. Copy `footstepsVQL_hook.so` and `footstepsVQL.py` from [`release/`](release/)
-   into your plugin directory (`minqlx-plugins/` or `minqlxtended-plugins/`).
-   Keep the `_hook` suffix: a file named `footstepsVQL.so` would shadow the
-   plugin.
+**By hand:**
+
+1. Copy `footstepsVQL.py` and the `footstepsVQL_lib/` folder from
+   [`release/`](release/) into your plugin directory (`minqlx-plugins/` or
+   `minqlxtended-plugins/`). The `.so` may also go directly next to the
+   plugin instead. Keep the `_hook` suffix: a file named `footstepsVQL.so`
+   would shadow the plugin.
 2. In `qlx_plugins`, replace `footsteps250` with `footstepsVQL`, or just add
    it.
 3. Restart the server or change map.
 4. The console shows two lines:
-   `[footstepsVQL] version 1.1: .so c96f49de, .py 7ce3da41` and
+   `[footstepsVQL] version 1.1.1: .so c96f49de, .py 8fae5aa1` and
    `[footstepsVQL] plugin load: hook installed (qagame base …, site …, ring …)`.
    In game, `!fsvstatus` shows the same version line and says the patch is
    active.
 
+**With [QLSM](https://github.com/dngrtech/qlsm)** (1.43.0 or newer):
+
+1. Settings → Repositories → Add Repository, with the URL
+   `https://github.com/ark-ql/footstepsVQL/tree/main/release`.
+2. Tick footstepsVQL, pick the runtime (minqlx or minqlxtended), and click
+   Download selected. QLSM fetches the plugin and its library, pushes them to
+   your hosts, and adds a settings form for the cvars.
+3. In the instance's Plugins tab, tick footstepsVQL (and untick
+   footsteps250), save, and restart the instance. Check step 4 above.
+
 No configuration is needed.
 
-**Upgrade:** replace both files, then `!reload footstepsVQL` or change map.
+**Upgrade:** replace the files (or download again in QLSM), then
+`!reload footstepsVQL` or change map.
 **Rollback:** `!fsvunload` restores stock bytes at once. Alternatively, remove
 the plugin from `qlx_plugins` and change map.
 
@@ -450,7 +466,7 @@ a single footstep.
 
 | Path | What |
 |---|---|
-| [`release/`](release/) | the two files to install, and `SHA256SUMS.txt` |
+| [`release/`](release/) | the plugin, the library in `footstepsVQL_lib/`, `SHA256SUMS.txt`, and `qlsm-repository.json` for QLSM |
 | [`server/footstepsVQL_hook.c`](server/footstepsVQL_hook.c), [`server/fs_cadence.c`](server/fs_cadence.c) | the hook and its cadence core |
 | [`server/footstepsVQL.py`](server/footstepsVQL.py) | the minqlx / minqlxtended plugin |
 | [`server/build.sh`](server/build.sh), [`server/release_build.sh`](server/release_build.sh), [`server/validate.sh`](server/validate.sh) | build and gates (run on the Linux server host) |

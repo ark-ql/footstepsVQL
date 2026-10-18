@@ -402,13 +402,42 @@ def run_with_lib(engine_name):
     return problems
 
 
+def run_lib_paths(engine_name):
+    """Where the library is looked for: the cvar, then whichever default exists,
+    next to the plugin first, then footstepsVQL_lib/ (a QLSM repository install).
+    A default that isn't there is not tried, so it can't add a warning line."""
+    problems = []
+    engine, mod, lib = fresh(engine_name)
+    plugin = mod.footstepsVQL()
+    here = str(PLUGIN.parent)
+    beside = mod.os.path.join(here, "footstepsVQL_hook.so")
+    sub = mod.os.path.join(here, "footstepsVQL_lib", "footstepsVQL_hook.so")
+    real_isfile = mod.os.path.isfile
+    try:
+        for present, cvar, want in (
+                ({sub}, "", [sub]),
+                ({beside, sub}, "", [beside, sub]),
+                (set(), "", [beside, sub]),
+                ({sub}, "/opt/x/footstepsVQL_hook.so", ["/opt/x/footstepsVQL_hook.so", sub])):
+            mod.os.path.isfile = lambda p, present=present: p in present
+            type(plugin)._cvars["qlx_footstepsVQLSo"] = cvar
+            got = plugin._candidates()
+            if got != want:
+                problems.append("present={} cvar={!r}: candidates {}, expected {}".format(
+                    sorted(mod.os.path.relpath(p, here) for p in present), cvar, got, want))
+    finally:
+        mod.os.path.isfile = real_isfile
+    return problems
+
+
 def main():
     global PLUGIN
     if len(sys.argv) > 1:
         PLUGIN = pathlib.Path(sys.argv[1]).resolve()
     failed = False
     for name in ("minqlx", "minqlxtended"):
-        for label, fn in (("no library", run_no_lib), ("fake library", run_with_lib)):
+        for label, fn in (("no library", run_no_lib), ("fake library", run_with_lib),
+                          ("library lookup", run_lib_paths)):
             problems = fn(name)
             if problems:
                 failed = True

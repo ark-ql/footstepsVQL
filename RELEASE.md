@@ -1,10 +1,17 @@
-# footstepsVQL 1.1 — `c96f49de` + `7ce3da41`
+# footstepsVQL 1.1.1 — `c96f49de` + `8fae5aa1`
 
-**Released.** Built and gated on 2026-10-07, and in production since 7–11
-October 2026 on four community servers (see *In production*). The public
-write-up is `README.md`. This file is the full record: artifacts, install,
-every change since the 2026-09-27 code review, the gates, the live
-measurements and the known limits.
+**Released.** The native library `c96f49de` was built and gated on 2026-10-07
+and has been in production since 7–11 October 2026 on four community servers,
+with the 1.1 plugin (see *In production*). The public write-up is `README.md`.
+This file is the full record: artifacts, install, every change since the
+2026-09-27 code review, the gates, the live measurements and the known limits.
+
+**Version 1.1.1 (2026-10-18): plugin `8fae5aa1`, library unchanged.** The
+plugin also finds the library in `footstepsVQL_lib/` next to it, so it can be
+installed from a QLSM plugin repository: QLSM ships a plugin's extra files only
+in a subfolder. A library next to the plugin is still tried first, and nothing
+else changed. `release/` now holds the library in `footstepsVQL_lib/` and a
+`qlsm-repository.json`. See *Install* and *What changed*.
 
 **Version 1.1 (2026-10-07): `.so` `c96f49de`, plugin `7ce3da41`.** Fixes a
 failure seen once in production on 1.0: after a map change, qagame was mapped
@@ -81,7 +88,7 @@ server's journal and logs, last on 2026-10-17. All four run 1.1, patched.
 | File | sha256 | Size | Built |
 |---|---|---|---|
 | `footstepsVQL_hook.so` | `c96f49decdef801a5945a5b81dd190b5a8a52e070f5647e67e2cae93fc8473cf` | 27520 B | test server, gcc 13.3.0, glibc 2.39 |
-| `footstepsVQL.py` | `7ce3da41db70009144dd654b0208a5d41fba3de0ccac68d5247128267c1759b6` | 24955 B | LF line endings, version 1.1 |
+| `footstepsVQL.py` | `8fae5aa17743c2be191d1cfbcc30d4ea40469d2856b7949cdb7bf34c1b9b5597` | 25480 B | LF line endings, version 1.1.1 |
 
 `scripts/_stage_release.py` refuses to stage anything that does not match these
 two rows, and writes `release/SHA256SUMS.txt`.
@@ -94,7 +101,7 @@ missing or matches twice. All seven signatures are unique in `qagamex64.so`
 `091d568f46a2…`. Before installing the bob hook it also checks the footstep gate
 around the site (see *What changed*), and refuses with `-6` if it differs.
 
-Supersedes `b6da48457882…` / `351f501f6a1e…` (1.0), `b6da48457882…` / `5597190d1495…`, `5a199d8d5120…` / `5597190d1495…`, `d6d28bed98c5…` / `5597190d1495…`, `bd6c781b530e…` / `5597190d1495…`, `c62aba41f340…` / `5597190d1495…`, `e4573c6e00e3…` / `5597190d1495…`, `d7ea25e425ba…` / `f744e90f6489…`, `10b40ab62220…` / `167e2911d4d5…`, `e10ad5206f6f…` / `167e2911d4d5…`, `9464c3c4ddc2…` / `9b0d042caf48…`, `ccf69b7b7983…` / `ac3433768a24…`,
+Supersedes `c96f49decdef…` / `7ce3da41db70…` (1.1), `b6da48457882…` / `351f501f6a1e…` (1.0), `b6da48457882…` / `5597190d1495…`, `5a199d8d5120…` / `5597190d1495…`, `d6d28bed98c5…` / `5597190d1495…`, `bd6c781b530e…` / `5597190d1495…`, `c62aba41f340…` / `5597190d1495…`, `e4573c6e00e3…` / `5597190d1495…`, `d7ea25e425ba…` / `f744e90f6489…`, `10b40ab62220…` / `167e2911d4d5…`, `e10ad5206f6f…` / `167e2911d4d5…`, `9464c3c4ddc2…` / `9b0d042caf48…`, `ccf69b7b7983…` / `ac3433768a24…`,
 and the test-rig pair `118945eb2807…` / `49bdd8308a9d…`.
 
 ## What it does
@@ -122,9 +129,11 @@ sites, installed together or not at all:
 
 ## Install as a footsteps250 substitute
 
-1. Upload `footstepsVQL_hook.so` and `footstepsVQL.py` into the plugin directory
-   (`minqlx-plugins/` or `minqlxtended-plugins/`). Keep the `_hook` suffix. A file
-   named `footstepsVQL.so` would shadow the plugin on import.
+1. Upload `footstepsVQL.py` and the `footstepsVQL_lib/` folder (it holds
+   `footstepsVQL_hook.so`) into the plugin directory (`minqlx-plugins/` or
+   `minqlxtended-plugins/`). The `.so` may also sit directly next to the
+   plugin, as before 1.1.1. Keep the `_hook` suffix. A file named
+   `footstepsVQL.so` would shadow the plugin on import.
 2. In `qlx_plugins`, replace `footsteps250` with `footstepsVQL`. The footsteps250
    files can stay on disk.
 3. Restart the server, or change map. If footsteps250 was only unloaded at
@@ -132,10 +141,18 @@ sites, installed together or not at all:
    logs `bobCycle site not found … takes over on the next map` and does exactly
    that.
 4. Check the console for two lines:
-   `[footstepsVQL] version 1.1: .so c96f49de, .py 7ce3da41` and
+   `[footstepsVQL] version 1.1.1: .so c96f49de, .py 8fae5aa1` and
    `[footstepsVQL] plugin load: hook installed (qagame base …, site …, ring …)`.
    In game, `!fsvstatus` must start with the same version line and say
    `now: patch is patched and active`.
+
+**From a QLSM plugin repository** (QLSM 1.43.0 or newer): Settings →
+Repositories → Add Repository, with the URL
+`https://github.com/ark-ql/footstepsVQL/tree/main/release`. Tick footstepsVQL,
+pick the runtime, and Download selected. QLSM fetches the plugin and
+`footstepsVQL_lib/footstepsVQL_hook.so`, pushes them to the hosts, and adds a
+settings form for the three cvars. Then tick footstepsVQL in the instance's
+Plugins tab (and untick footsteps250), save and restart. Check step 4.
 
 No cvar needs to be set. `qlx_footstepsVQLMode` and `qlx_footstepsVQLEmit` no
 longer exist; if a config still sets them, they are ignored.
@@ -423,6 +440,34 @@ against the 2.114/s measured here. That is a tempo difference, not unevenness,
 and it is the open retarget question.
 
 ## What changed, from the 2026-09-27 code review
+
+### Version 1.1.1: plugin `8fae5aa1`, since 1.1
+
+- **Why:** to install from a QLSM plugin repository. QLSM (1.43.0 and newer)
+  fetches extra files of a plugin only through the manifest's
+  `package_files`, and only at least one folder deep, so the library can't
+  arrive next to the plugin. Read in QLSM's source (`ui/plugin_repositories.py`,
+  `ansible/playbooks/tasks/sync_common_plugins.yml`): files are written byte
+  for byte, the pool reaches the hosts by `rsync -a` with no filter, and each
+  instance is refreshed from it at restart.
+- **The plugin looks in `footstepsVQL_lib/` too.** The candidates are the
+  `qlx_footstepsVQLSo` path, then those of `footstepsVQL_hook.so` next to the
+  plugin and `footstepsVQL_lib/footstepsVQL_hook.so` that exist, in that order.
+  A default that isn't there is not tried, so neither install style adds a
+  warning line; with neither present, both are named in the "no hook library
+  loaded" line. Not `footstepsVQL/`: a folder named like the module is a
+  namespace-package candidate for the same import. `VERSION = "1.1.1"`.
+- **`release/`:** the library moved to `release/footstepsVQL_lib/`, next to a
+  new `qlsm-repository.json` (written by `scripts/_stage_release.py`). Its
+  `sha256` values are of the LF-normalized bytes, as QLSM compares them; for
+  the `.so`, which has 33 lone CR bytes and no CRLF, that differs from the
+  file's real hash, which `SHA256SUMS.txt` keeps.
+- **Gated:** `_plugin_review_check.py` (Python 3.5 syntax, shim, handlers) and
+  `_plugin_shim_test.py` on both runtimes, with a new *library lookup* case:
+  only the subfolder copy, both, neither, and a cvar path. The `.so` is
+  unchanged, so its gates still hold.
+- **Not yet run:** an install through QLSM's repository download on the test
+  server.
 
 ### Version 1.1: `c96f49de` + `7ce3da41`, since 1.0
 

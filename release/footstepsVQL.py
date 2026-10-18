@@ -38,7 +38,8 @@ Cvars
   qlx_footstepsVQLEnabled  "1" re-applies the hook on every new map, "0" leaves
                            qagame vanilla. !fsvload / !fsvunload write it.
   qlx_footstepsVQLSo       absolute path to footstepsVQL_hook.so. Default: next
-                           to this file.
+                           to this file, else in footstepsVQL_lib/ next to it
+                           (where a QLSM repository install puts it).
   qlx_footstepsVQLVerbose  "1" also logs the routine per-map lines. Default "0":
                            silent while everything works. Load-time state, every
                            failure, every retry and every recheck are logged
@@ -97,7 +98,13 @@ else:
         "footstepsVQL found neither minqlx nor minqlxtended loaded; it has to be "
         "imported by one of those engines, not standalone")
 
-VERSION = "1.1"
+VERSION = "1.1.1"
+
+# QLSM ships a plugin's extra files only in a subfolder (package_files), so the
+# library may sit one level down. Not "footstepsVQL/": a folder named like the
+# module is a namespace-package candidate for the same import.
+LIB_NAME = "footstepsVQL_hook.so"
+LIB_DIR = "footstepsVQL_lib"
 
 # Mirrors the FSVQL_* constants in footstepsVQL_hook.c.
 STATUS_TEXT = {
@@ -226,7 +233,9 @@ class footstepsVQL(engine.Plugin):
     def _candidates(self):
         cvar = (self.get_cvar("qlx_footstepsVQLSo") or "").strip()
         here = os.path.dirname(os.path.abspath(__file__))
-        return [p for p in (cvar, os.path.join(here, "footstepsVQL_hook.so")) if p]
+        defaults = [os.path.join(here, LIB_NAME), os.path.join(here, LIB_DIR, LIB_NAME)]
+        present = [p for p in defaults if os.path.isfile(p)]
+        return [p for p in [cvar] + (present or defaults) if p]
 
     def _stage(self, path):
         """Load through a content-tagged copy, so new bytes always get a new
