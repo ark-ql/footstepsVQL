@@ -152,7 +152,13 @@ Repositories → Add Repository, with the URL
 pick the runtime, and Download selected. QLSM fetches the plugin and
 `footstepsVQL_lib/footstepsVQL_hook.so`, pushes them to the hosts, and adds a
 settings form for the three cvars. Then tick footstepsVQL in the instance's
-Plugins tab (and untick footsteps250), save and restart. Check step 4.
+Plugins tab (and untick footsteps250), save and restart. Check step 4. If
+footstepsVQL was uploaded to that instance by hand before, delete those
+instance files (`footstepsVQL.py`, `footstepsVQL_hook.so`) first: an
+instance's own files always win over QLSM's shared copy. Verified on the test
+server on 2026-10-18: a fresh install on one instance, and on the other a
+switch from a hand upload after deleting it; both load 1.1.1 from
+`footstepsVQL_lib/` with the hook patched.
 
 No cvar needs to be set. `qlx_footstepsVQLMode` and `qlx_footstepsVQLEmit` no
 longer exist; if a config still sets them, they are ignored.
@@ -466,8 +472,14 @@ and it is the open retarget question.
   `_plugin_shim_test.py` on both runtimes, with a new *library lookup* case:
   only the subfolder copy, both, neither, and a cvar path. The `.so` is
   unchanged, so its gates still hold.
-- **Not yet run:** an install through QLSM's repository download on the test
-  server.
+- **Installed through QLSM on the test server (2026-10-18),** minqlxtended, from
+  the repository URL of a test branch. Port 27960, a fresh install: the pool and
+  the instance held the plugin, `footstepsVQL_lib/footstepsVQL_hook.so` and the
+  settings sidecar, and the load line read `version 1.1.1: .so c96f49de, .py
+  8fae5aa1` with `hook installed` before and after a restart; status 1 read
+  from process memory. Port 27961 kept loading its hand-uploaded 1.1 copy until
+  that was deleted, then loaded 1.1.1 the same way (status 1). Not run: QLSM on
+  minqlx.
 
 ### Version 1.1: `c96f49de` + `7ce3da41`, since 1.0
 

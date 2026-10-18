@@ -405,6 +405,11 @@ Details per server are in [`RELEASE.md`](RELEASE.md), *In production*.
 3. In the instance's Plugins tab, tick footstepsVQL (and untick
    footsteps250), save, and restart the instance. Check step 4 above.
 
+**If you uploaded footstepsVQL to an instance by hand before,** delete that
+copy (`footstepsVQL.py` and `footstepsVQL_hook.so`) in the instance's Plugins
+tab first. A file uploaded to an instance always wins over QLSM's shared copy,
+so the instance would keep loading the old version.
+
 No configuration is needed.
 
 **Upgrade:** replace the files (or download again in QLSM), then
