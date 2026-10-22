@@ -148,6 +148,9 @@ sites, installed together or not at all:
 
 **From a QLSM plugin repository** (QLSM 1.43.0 or newer): Settings →
 Repositories → Add Repository, with the URL
+`https://github.com/ark-ql/minqlx-plugins` (the shared plugins repository,
+which carries the same files and manifest entry; `scripts/_sync_plugins_repo.py`
+copies them there) or this repository's
 `https://github.com/ark-ql/footstepsVQL/tree/main/release`. Tick footstepsVQL,
 pick the runtime, and Download selected. QLSM fetches the plugin and
 `footstepsVQL_lib/footstepsVQL_hook.so`, pushes them to the hosts, and adds a

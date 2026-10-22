@@ -398,7 +398,10 @@ Details per server are in [`RELEASE.md`](RELEASE.md), *In production*.
 **With [QLSM](https://github.com/dngrtech/qlsm)** (1.43.0 or newer):
 
 1. Settings → Repositories → Add Repository, with the URL
-   `https://github.com/ark-ql/footstepsVQL/tree/main/release`.
+   `https://github.com/ark-ql/minqlx-plugins` ([ark's plugins
+   repository](https://github.com/ark-ql/minqlx-plugins), which carries this
+   release). This repository's own `https://github.com/ark-ql/footstepsVQL/tree/main/release`
+   works too; add only one of the two.
 2. Tick footstepsVQL, pick the runtime (minqlx or minqlxtended), and click
    Download selected. QLSM fetches the plugin and its library, pushes them to
    your hosts, and adds a settings form for the cvars.
